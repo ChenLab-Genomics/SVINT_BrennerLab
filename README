@@ -1,0 +1,55 @@
+# Please email jingqichen@fudan.edu.cn if you have any suggestions or encounter any issues when using SVINT.
+# SVINT normal only needs 1 or a few minutes.
+# In cases where multiple SVs are very large (>5 Mb), SVINT will need more time and more memory to run.
+
+0. dependants
+perl: SVINT tested on Perl 5
+bedtools: SVINT tested on v2.25.0
+
+1. download "SVINT_v*.tar.gz", and unzip it by:
+tar -xvf SVINT_v1.3_hg19.tar.gz
+# after unzipping, there will be a folder "SVINT/"
+
+2. cd your-directory/SVINT/
+and use this as your working directory
+# your-directory is where you unzip your SVINT_*.tar.gz
+
+3. usage examples:
+perl src/SVINT_anno_single.pl data/sample/test_data.vcf VCF 0.01
+Or
+perl src/SVINT_anno_single.pl data/cases/case3_vus.txt TXT 0.001
+Or
+perl src/SVINT_anno_single_include_exonicSV.pl data/sample/test_data.vcf VCF 0.01
+# if everything is alright, it will run through in less than a few minutes.
+# if use src/SVINT_anno_single_include_exonicSV.pl, the program will annotate SVs that overlap with exons as well: both the overlapped genes, and the REs and targets affected by the SVs; this may greatly increase the run time and the memory needed if the SVs are very large (>5Mb)
+ 
+# "0.01" and "0.001" are optional cutoffs for FI (FI <=...); this cutoff does not affect the main VCF output, but only applied to the TXT output; if this cutoff is not provided, by default SVINT will use FI<=0.01 for the TXT output 
+# the following lines will be output into screen:
+"
+##########################################################
+SVINT v* starts...
+please note: SVINT is using data/kg/ALL.wgs.mergedSV.v8.20130502.svs.genotypes.hg19.vcf_based_FI.txt
+Read in data...
+Filter by gene annotation...
+Calculate SV impact on TAD boundary regions ...
+Annotate with regulatory elements ...
+Annotate with RE-target information, and their TAD boundary impact ..."
+Annotate with Frequency of Impact for REs calculated through 1000Genome Project SV data ...
+Write out the new VCF and TXT files...
+SVINT done.
+################
+*'*'*'*'*'*'*'*'*'*'*'*'*'*'*'*
+"
+
+It should be successfully done when you see "SVINT done.".
+The result will be in the same directory as the input data (data/sample/ or data/cases for the above examples):
+(1) **_SVINT_v1.3_anno.vcf 
+# above is the main result--SVINT annotated VCF; see meta-information and header stored at the begining of this file for details
+
+(2) TXT format results that are subsets of the main VCF output based on various cutoffs. E.g.:
+**_SVINT_v1.4_anno_FI0.01_impact50_1method.txt (FI<=0.01; RE region impacted proportion >=50%; predicted target genes supported by >= 1 prediction method)
+**_SVINT_v1.4_anno_FI0.001_impact100_2method.txt (FI<=0.001; RE region impacted proportion =100%; predicted target genes supported by >= 2 prediction methods)
+
+(3) **_RegulatoryRegion--Gene_crossTAD-cells.txt
+# this is a file that contains information of the cell types that each observed regulatory region - target gene relationship cross TAD boundaries; if the regulatory region and target gene are >10Mb from each other, it will cross TAD boundaries with a probability >99.9%
+# this file is just for information; not essential results

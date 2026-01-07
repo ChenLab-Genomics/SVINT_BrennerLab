@@ -52,4 +52,10 @@ The result will be in the same directory as the input data (data/sample/ or data
 
 (3) **_RegulatoryRegion--Gene_crossTAD-cells.txt
 # this is a file that contains information of the cell types that each observed regulatory region - target gene relationship cross TAD boundaries; if the regulatory region and target gene are >10Mb from each other, it will cross TAD boundaries with a probability >99.9%
+
+(4) Should you be interested in trying the (untested optional) SV prioritizing script:
+followup_disease_specific_prioritization.pl
+Try:
+perl src/followup_disease_specific_prioritization.pl data/sample/test_data2_ng.3720.vcf_SVINT_v*_anno.vcf 0.001 HP:0010864,HP:0000750,HP:0001252
+# The heuristic scores provided by this followup script are provided as an arbitery score, and have not been evaluated extensively on how well they represent the potential of pathogenicity. Please use the heuristic scores with great caution
 # this file is just for information; not essential results
